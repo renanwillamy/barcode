@@ -3,11 +3,13 @@ package com.sample.barcode;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -18,12 +20,14 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ScanBarCodeActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
     public static final String BARCODE = "barcode";
     private SurfaceView mCameraPreview;
     private CameraSource mCameraSource;
+    private BarcodeDetector mBarcodeDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +39,8 @@ public class ScanBarCodeActivity extends AppCompatActivity {
     }
 
     private void createCameraSource() {
-        BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(this).build();
-        mCameraSource = new CameraSource.Builder(this, barcodeDetector)
+        mBarcodeDetector = new BarcodeDetector.Builder(this).build();
+        mCameraSource = new CameraSource.Builder(this, mBarcodeDetector)
                 .setAutoFocusEnabled(true)
                 .setRequestedPreviewSize(1600, 1024)
                 .build();
@@ -57,7 +61,11 @@ public class ScanBarCodeActivity extends AppCompatActivity {
             }
         });
 
-        barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
+        //startBarcodeDetection();
+    }
+
+    private void startBarcodeDetection() {
+        mBarcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
 
@@ -66,14 +74,36 @@ public class ScanBarCodeActivity extends AppCompatActivity {
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
+                ArrayList<String> list = new ArrayList<>();
                 if (barcodes.size() > 0) {
                     Intent intent = new Intent();
-                    intent.putExtra(BARCODE, barcodes.valueAt(0));
+                    for (int i = 0; i < barcodes.size(); i++) {
+                        list.add(barcodes.valueAt(i).rawValue);
+                    }
+                    intent.putExtra(BARCODE, list);
                     setResult(CommonStatusCodes.SUCCESS, intent);
-                    finish();
+                    // Load the sounds
+                    SoundPool soundPool = new SoundPool.Builder()
+                            .setMaxStreams(10)
+                            .build();
+                    final int soundID = soundPool.load(ScanBarCodeActivity.this, R.raw.beep, 1);
+                    soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                        @Override
+                        public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+                            soundPool.play(soundID, 0.5f, 0.5f, 1, 0, 1);
+                            finish();
+                        }
+                    });
+
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        startBarcodeDetection();
+        return super.onTouchEvent(event);
     }
 
     private void startCameraSource() {
@@ -84,7 +114,6 @@ public class ScanBarCodeActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(ScanBarCodeActivity.this,
                     new String[]{Manifest.permission.CAMERA},
                     MY_PERMISSIONS_REQUEST_CAMERA);
-
             return;
         }
         try {
