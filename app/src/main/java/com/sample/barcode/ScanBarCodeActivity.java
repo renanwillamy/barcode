@@ -3,15 +3,21 @@ package com.sample.barcode;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.SparseArray;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.CameraSource;
@@ -22,12 +28,15 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ScanBarCodeActivity extends AppCompatActivity {
+public class ScanBarCodeActivity extends AppCompatActivity implements SurfaceHolder.Callback {
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
     public static final String BARCODE = "barcode";
+    private static final String TAG = "ScanBArCodeActivity";
     private SurfaceView mCameraPreview;
     private CameraSource mCameraSource;
     private BarcodeDetector mBarcodeDetector;
+    private SurfaceHolder holderTransparent;
+    private Paint mPaint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +44,26 @@ public class ScanBarCodeActivity extends AppCompatActivity {
         setContentView(R.layout.scan_bar_code);
 
         mCameraPreview = (SurfaceView) findViewById(R.id.camera_preview);
+        SurfaceView mTransparentView = (SurfaceView) findViewById(R.id.TransparentView);
+
+        holderTransparent = mTransparentView.getHolder();
+        holderTransparent.setFormat(PixelFormat.TRANSPARENT);
+        mPaint = new Paint();
         createCameraSource();
+    }
+
+    private void drawHorizontalLine() {
+        Canvas mCanvas = holderTransparent.lockCanvas();
+        mCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
+        //border's properties
+        mPaint = new Paint();
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setColor(Color.RED);
+        mPaint.setStrokeWidth(3);
+        int width = mCanvas.getWidth();
+        int height = mCanvas.getHeight() / 2;
+        mCanvas.drawLine(0, height, width, height, mPaint);
+        holderTransparent.unlockCanvasAndPost(mCanvas);
     }
 
     private void createCameraSource() {
@@ -60,11 +88,10 @@ public class ScanBarCodeActivity extends AppCompatActivity {
                 mCameraSource.stop();
             }
         });
-
-        //startBarcodeDetection();
     }
 
-    private void startBarcodeDetection() {
+    public void startBarcodeDetection(View view) {
+        drawHorizontalLine();
         mBarcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
@@ -94,16 +121,9 @@ public class ScanBarCodeActivity extends AppCompatActivity {
                             finish();
                         }
                     });
-
                 }
             }
         });
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        startBarcodeDetection();
-        return super.onTouchEvent(event);
     }
 
     private void startCameraSource() {
@@ -133,4 +153,36 @@ public class ScanBarCodeActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        tryDrawing(holder);
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int frmt, int w, int h) {
+        tryDrawing(holder);
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+    }
+
+    private void tryDrawing(SurfaceHolder holder) {
+        Log.i(TAG, "Trying to draw...");
+
+        Canvas canvas = holder.lockCanvas();
+        if (canvas == null) {
+            Log.e(TAG, "Cannot draw onto the mCanvas as it's null");
+        } else {
+            drawMyStuff(canvas);
+            holder.unlockCanvasAndPost(canvas);
+        }
+    }
+
+    private void drawMyStuff(final Canvas canvas) {
+        Log.i(TAG, "Drawing...");
+        canvas.drawRGB(255, 128, 128);
+    }
+
 }

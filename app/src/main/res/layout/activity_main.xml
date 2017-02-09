@@ -11,15 +11,23 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.sample.barcode.MainActivity">
 
+    <ImageView
+        android:id="@+id/image_view_barcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/barcode_icon"
+        android:contentDescription="@string/barcode_icon" />
     
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="Process" />
+        android:text="@string/scan" />
     <ListView
         android:id="@+id/lvContent"
+        android:layout_below="@id/image_view_barcode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/button" />

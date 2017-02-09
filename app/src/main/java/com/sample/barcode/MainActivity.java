@@ -18,7 +18,6 @@ import static com.sample.barcode.ScanBarCodeActivity.BARCODE;
 public class MainActivity extends Activity {
     public static final int REQUEST_CODE_SCAN = 0;
     private ListView mLvContent;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
