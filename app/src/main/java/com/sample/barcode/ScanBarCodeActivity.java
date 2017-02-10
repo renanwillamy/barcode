@@ -7,7 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
-import android.graphics.PorterDuff;
+import android.graphics.RectF;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,7 +17,6 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.CameraSource;
@@ -35,8 +34,9 @@ public class ScanBarCodeActivity extends AppCompatActivity implements SurfaceHol
     private SurfaceView mCameraPreview;
     private CameraSource mCameraSource;
     private BarcodeDetector mBarcodeDetector;
-    private SurfaceHolder holderTransparent;
+    private SurfaceHolder mHolderTransparent;
     private Paint mPaint;
+    private boolean mRunning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,24 +46,53 @@ public class ScanBarCodeActivity extends AppCompatActivity implements SurfaceHol
         mCameraPreview = (SurfaceView) findViewById(R.id.camera_preview);
         SurfaceView mTransparentView = (SurfaceView) findViewById(R.id.TransparentView);
 
-        holderTransparent = mTransparentView.getHolder();
-        holderTransparent.setFormat(PixelFormat.TRANSPARENT);
+
+        mHolderTransparent = mTransparentView.getHolder();
+        mHolderTransparent.setFormat(PixelFormat.TRANSPARENT);
         mPaint = new Paint();
         createCameraSource();
     }
 
-    private void drawHorizontalLine() {
-        Canvas mCanvas = holderTransparent.lockCanvas();
-        mCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
-        //border's properties
+    private void drawTransparentBackground() {
+        final int TRANSPARENCY = 50;
+        if (mHolderTransparent.getSurface().isValid()) {
+            Canvas mCanvas = mHolderTransparent.lockCanvas();
+            float screenWidth = mCameraPreview.getWidth();
+            float screenHeight = mCameraPreview.getHeight();
+            int squareSize = (int) ((int) screenWidth * (0.8));
+            float x1, x2, y1, y2;
+            x1 = (screenWidth - squareSize) / 2;
+            x2 = x1 + squareSize;
+            y1 = (screenHeight - squareSize) / 2;
+            y2 = y1 + squareSize;
+            RectF[] dark = new RectF[]{
+                    new RectF(0, 0, screenWidth, y1), new RectF(0, y1, x1, y2), new RectF(x2, y1,
+                    screenWidth, y2), new RectF(0, y2, screenWidth, screenHeight)};
+            mPaint = new Paint();
+            mPaint.setColor(Color.GREEN);
+            mPaint.setAlpha((TRANSPARENCY));
+            for (RectF r : dark) {
+                mCanvas.drawRect(r, mPaint);
+            }
+            drawHorizontalLine(mCanvas);
+
+            mHolderTransparent.unlockCanvasAndPost(mCanvas);
+        }
+    }
+
+    private void drawHorizontalLine(Canvas mCanvas) {
+        float screenWidth = mCameraPreview.getWidth();
+        float screenHeight = mCameraPreview.getHeight();
+        int squareSize = (int) ((int) screenWidth * (0.8));
+        float x1, x2, y1, y2;
+        x1 = (screenWidth - squareSize) / 2;
+        x2 = x1 + squareSize;
         mPaint = new Paint();
         mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setColor(Color.RED);
-        mPaint.setStrokeWidth(3);
-        int width = mCanvas.getWidth();
+        mPaint.setColor(Color.WHITE);
+        mPaint.setStrokeWidth(5);
         int height = mCanvas.getHeight() / 2;
-        mCanvas.drawLine(0, height, width, height, mPaint);
-        holderTransparent.unlockCanvasAndPost(mCanvas);
+        mCanvas.drawLine(x1, height, x2, height, mPaint);
     }
 
     private void createCameraSource() {
@@ -75,7 +104,11 @@ public class ScanBarCodeActivity extends AppCompatActivity implements SurfaceHol
         mCameraPreview.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
-                startCameraSource();
+                mRunning = true;
+            /*    Thread thread = new Thread(ScanBarCodeActivity.this);
+               // thread.start();*/
+           //     drawTransparentBackground();
+                startBarcodeDetection();
             }
 
             @Override
@@ -90,8 +123,7 @@ public class ScanBarCodeActivity extends AppCompatActivity implements SurfaceHol
         });
     }
 
-    public void startBarcodeDetection(View view) {
-        drawHorizontalLine();
+    public void startBarcodeDetection() {
         mBarcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
@@ -185,4 +217,22 @@ public class ScanBarCodeActivity extends AppCompatActivity implements SurfaceHol
         canvas.drawRGB(255, 128, 128);
     }
 
+    @Override
+    protected void onPause() {
+        mRunning = false;
+        super.onPause();
+    }
+
+    /*@Override
+    public void run() {
+        while (mRunning) {
+
+           // drawTransparentBackground();
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }*/
 }
