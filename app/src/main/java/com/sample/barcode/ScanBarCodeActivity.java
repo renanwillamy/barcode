@@ -16,12 +16,15 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.sample.utils.AppConfiguration;
+import com.sample.utils.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,7 +42,7 @@ public class ScanBarCodeActivity extends Activity implements SurfaceHolder.Callb
     private boolean mSoundLoaded;
     private Thread mThread;
     private GraphicOverload mGraphicOverload;
-
+    private AppConfiguration mConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,17 +55,29 @@ public class ScanBarCodeActivity extends Activity implements SurfaceHolder.Callb
         mHolderTransparent = mTransparentView.getHolder();
         mHolderTransparent.setFormat(PixelFormat.TRANSPARENT);
         mGraphicOverload = new GraphicOverload();
-        loadSound();
-        createCameraSource();
+        mConfig = Utils.loadConfiguration(this);
+
     }
 
     private void createCameraSource() {
-        mBarcodeDetector = new BarcodeDetector.Builder(this).build();
+        mBarcodeDetector = new BarcodeDetector.Builder(this)
+                .setBarcodeFormats(mConfig.getFormats())
+                .build();
+
         mCameraSource = new CameraSource.Builder(this, mBarcodeDetector)
                 .setAutoFocusEnabled(true)
                 .setRequestedPreviewSize(1600, 1024)
                 .build();
         mCameraPreview.getHolder().addCallback(this);
+    }
+
+    private void stopCameraSource() {
+        if (mBarcodeDetector != null) {
+            mBarcodeDetector.release();
+        }
+        if (mCameraSource != null) {
+            mCameraSource.release();
+        }
     }
 
     public void startBarcodeDetection() {
@@ -177,17 +192,19 @@ public class ScanBarCodeActivity extends Activity implements SurfaceHolder.Callb
     @Override
     protected void onResume() {
         super.onResume();
+        loadSound();
+        createCameraSource();
         if (mThread != null) {
             if (!mThread.isAlive()) {
                 startThread();
             }
         }
-
     }
 
     @Override
     protected void onPause() {
         mGraphicOverload.mRunning = false;
+        stopCameraSource();
         super.onPause();
     }
 
@@ -209,5 +226,9 @@ public class ScanBarCodeActivity extends Activity implements SurfaceHolder.Callb
                 e.printStackTrace();
             }
         }
+    }
+
+    public void gotToConfig(View view) {
+        startActivity(new Intent(this, ConfigActivity.class));
     }
 }

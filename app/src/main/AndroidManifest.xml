@@ -12,10 +12,11 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".BarcodeActivity"
-            android:parentActivityName="com.sample.MainActivity"
-            android:configChanges="orientation|screenSize"/>
-        <activity android:name=".ScanBarCodeActivity"
-            android:parentActivityName=".BarcodeActivity"/>
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName="com.sample.MainActivity" />
+        <activity
+            android:name=".ScanBarCodeActivity"
+            android:parentActivityName=".BarcodeActivity" />
         <activity android:name="com.sample.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,8 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.sample.list.ListDataActivity"
-            android:parentActivityName="com.sample.MainActivity"/>
+        <activity
+            android:name="com.sample.list.ListDataActivity"
+            android:parentActivityName="com.sample.MainActivity" />
+        <activity android:name=".ConfigActivity"
+            android:parentActivityName=".ScanBarCodeActivity"/>
     </application>
 
 </manifest>

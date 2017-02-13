@@ -10,28 +10,24 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.sample.MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:orientation="vertical">
-
         <Button
             android:id="@+id/btn_scan"
             android:text="@string/scan"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="goToScan"/>
         <Button
             android:id="@+id/btn_list"
             android:text="@string/list_data"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_below="@id/btn_scan"
             android:layout_gravity="center_horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="goToListData"/>
-
-    </LinearLayout>
 
 </RelativeLayout>

@@ -6,10 +6,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-public class GraphicOverload {
+class GraphicOverload {
     private float mLineHeight;
     private Paint mPaint;
-    double mSquareSize [] = {0.80,0.80};
+    double mSquareSize[] = {0.80, 0.80};
     boolean mRunning;
     Canvas mCanvas;
     float mScreenWidth;
@@ -21,7 +21,7 @@ public class GraphicOverload {
     private float mY1;
     private float mY2;
 
-    public GraphicOverload() {
+    GraphicOverload() {
         mPaint = new Paint();
     }
 
@@ -40,14 +40,14 @@ public class GraphicOverload {
 
     }
 
-    void drawSquareBorders() {
+    private void drawSquareBorders() {
         mPaint.setColor(Color.WHITE);
         mPaint.setStrokeWidth(2);
         mPaint.setStyle(Paint.Style.STROKE);
         mCanvas.drawRect(mX1, mY1, mX2, mY2, mPaint);
     }
 
-    void initDarkRect() {
+    private void initDarkRect() {
         int squareSizeWidth = (int) ((int) mScreenWidth * mSquareSize[0]);
         int squareSizeHeight = (int) ((int) mScreenWidth * mSquareSize[1]);
         mX1 = (mScreenWidth - squareSizeWidth) / 2;

@@ -18,6 +18,7 @@ import static com.sample.barcode.ScanBarCodeActivity.BARCODE;
 public class BarcodeActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_SCAN = 0;
     private ListView mLvContent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +41,7 @@ public class BarcodeActivity extends AppCompatActivity {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     ArrayList<String> barcodes = data.getStringArrayListExtra(BARCODE);
-                    if(barcodes!=null) {
+                    if (barcodes != null) {
                         mLvContent.setAdapter(new ArrayAdapter<>(
                                 BarcodeActivity.this, android.R.layout.simple_list_item_1, barcodes));
                     }
