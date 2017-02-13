@@ -1,20 +1,17 @@
 package com.sample.barcode;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
-import android.graphics.RectF;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
@@ -29,31 +26,20 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ScanBarCodeActivity extends AppCompatActivity implements SurfaceHolder.Callback,
+public class ScanBarCodeActivity extends Activity implements SurfaceHolder.Callback,
         Runnable {
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
     public static final String BARCODE = "barcode";
-    public double mSquareSize = 0.80;
     private SurfaceView mCameraPreview;
     private CameraSource mCameraSource;
     private BarcodeDetector mBarcodeDetector;
     private SurfaceHolder mHolderTransparent;
-    private float mLineHeight;
-    private Paint mPaint;
-    private boolean mRunning;
-    private Canvas mCanvas;
-    private float mScreenWidth;
-    private float mScreenHeight;
-    private RectF[] mDarkRect;
     private SoundPool mSoundPool;
     private int mSoundID;
     private boolean mSoundLoaded;
     private Thread mThread;
-    private boolean mReverse;
-    private float mX1;
-    private float mX2;
-    private float mY1;
-    private float mY2;
+    private GraphicOverload mGraphicOverload;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,80 +51,9 @@ public class ScanBarCodeActivity extends AppCompatActivity implements SurfaceHol
 
         mHolderTransparent = mTransparentView.getHolder();
         mHolderTransparent.setFormat(PixelFormat.TRANSPARENT);
-        mPaint = new Paint();
+        mGraphicOverload = new GraphicOverload();
         loadSound();
         createCameraSource();
-    }
-
-    private void drawTransparentBackground() {
-        final int TRANSPARENCY = 45;
-        if (mDarkRect == null) {
-            initDarkRect();
-        }
-        drawSquareBorders();
-        mPaint = new Paint();
-        mPaint.setColor(Color.WHITE);
-        mPaint.setAlpha((TRANSPARENCY));
-        for (RectF r : mDarkRect) {
-            mCanvas.drawRect(r, mPaint);
-        }
-
-    }
-
-    private void drawSquareBorders() {
-        mPaint.setColor(Color.WHITE);
-        mPaint.setStrokeWidth(2);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mCanvas.drawRect(mX1, mY1, mX2, mY2, mPaint);
-    }
-
-    private void initDarkRect() {
-        int squareSize = (int) ((int) mScreenWidth * mSquareSize);
-        mX1 = (mScreenWidth - squareSize) / 2;
-        mX2 = mX1 + squareSize;
-        mY1 = (mScreenHeight - squareSize) / 2;
-        mY2 = mY1 + squareSize;
-        mDarkRect = new RectF[]{
-                new RectF(0, 0, mScreenWidth, mY1), new RectF(0, mY1, mX1, mY2), new RectF(mX2, mY1,
-                mScreenWidth, mY2), new RectF(0, mY2, mScreenWidth, mScreenHeight)};
-    }
-
-    private void drawHorizontalLine() {
-        if (mLineHeight <= mY1) {
-            if (mReverse) {
-                mReverse = false;
-            } else {
-                mLineHeight = mY1;
-            }
-        } else if (mLineHeight >= mY2) {
-            if (!mReverse) mReverse = true;
-        }
-        mPaint = new Paint();
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setColor(Color.GREEN);
-        mPaint.setStrokeWidth(5);
-        mCanvas.drawLine(mX1, mLineHeight, mX2, mLineHeight, mPaint);
-        if (mReverse) {
-            mLineHeight -= 7;
-        } else {
-            mLineHeight += 7;
-        }
-    }
-
-    private void drawCrossLine() {
-        int squareSize = (int) ((int) mScreenWidth * mSquareSize);
-        float y1, x1, x2;
-        x1 = mX1 + (squareSize / 2);
-        mPaint = new Paint();
-        mPaint.setColor(Color.WHITE);
-        mPaint.setStrokeWidth(5);
-        mCanvas.drawLine(x1, mY1 + 20, x1, mY1 - 50, mPaint);
-        mCanvas.drawLine(x1, mY2 + 50, x1, mY2 - 20, mPaint);
-        y1 = (mY1 + (squareSize) / 2);
-        x1 = (mScreenWidth - squareSize) / 2;
-        x2 = mX1 + squareSize;
-        mCanvas.drawLine(x1 - 50, y1, x1 + 20, y1, mPaint);
-        mCanvas.drawLine(x2 - 20, y1, x2 + 50, y1, mPaint);
     }
 
     private void createCameraSource() {
@@ -154,7 +69,6 @@ public class ScanBarCodeActivity extends AppCompatActivity implements SurfaceHol
         mBarcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
-
             }
 
             @Override
@@ -227,14 +141,16 @@ public class ScanBarCodeActivity extends AppCompatActivity implements SurfaceHol
     }
 
     private void startThread() {
-        mRunning = true;
+        mGraphicOverload.mRunning = true;
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            mSquareSize = 0.45;
+            mGraphicOverload.mSquareSize[0] = 0.80;
+            mGraphicOverload.mSquareSize[1] = 0.40;
         } else {
-            mSquareSize = 0.8;
+            mGraphicOverload.mSquareSize[0] = 0.80;
+            mGraphicOverload.mSquareSize[1] = 0.80;
         }
-        mScreenWidth = mCameraPreview.getWidth();
-        mScreenHeight = mCameraPreview.getHeight();
+        mGraphicOverload.mScreenWidth = mCameraPreview.getWidth();
+        mGraphicOverload.mScreenHeight = mCameraPreview.getHeight();
         mThread = new Thread(ScanBarCodeActivity.this);
         mThread.start();
     }
@@ -271,22 +187,22 @@ public class ScanBarCodeActivity extends AppCompatActivity implements SurfaceHol
 
     @Override
     protected void onPause() {
-        mRunning = false;
+        mGraphicOverload.mRunning = false;
         super.onPause();
     }
 
     @Override
     public void run() {
-        while (mRunning) {
+        while (mGraphicOverload.mRunning) {
             if (!mHolderTransparent.getSurface().isValid()) continue;
-            mCanvas = mHolderTransparent.lockCanvas();
-            mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+            mGraphicOverload.mCanvas = mHolderTransparent.lockCanvas();
+            mGraphicOverload.mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
-            drawHorizontalLine();
-            drawCrossLine();
-            drawTransparentBackground();
+            mGraphicOverload.drawHorizontalLine();
+            mGraphicOverload.drawCrossLine();
+            mGraphicOverload.drawTransparentBackground();
 
-            mHolderTransparent.unlockCanvasAndPost(mCanvas);
+            mHolderTransparent.unlockCanvasAndPost(mGraphicOverload.mCanvas);
             try {
                 Thread.sleep(5);
             } catch (InterruptedException e) {
