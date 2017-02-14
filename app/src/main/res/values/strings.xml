@@ -1,5 +1,25 @@
 <resources>
-    <string name="app_name">Barcode</string>
+    <string name="app_name">Compal Mobile</string>
     <string name="barcode_result">Barcode result: %1$s</string>
     <string name="barcode_no_found">No barcode found!</string>
+    <string name="scan">Scan</string>
+    <string name="barcode_icon">barcode_icon</string>
+    <string name="detect">Detect</string>
+    <string name="list_data">List Data</string>
+    <string name="barcode_format_1d">Barcode format 1D</string>
+    <string name="ean_13">EAN-13</string>
+    <string name="ean_8">EAN-8</string>
+    <string name="upc_a">UPC-A</string>
+    <string name="configuration">Configuration</string>
+    <string name="upc_e">UPC-E</string>
+    <string name="code_39">Code-39</string>
+    <string name="code_93">Code-93</string>
+    <string name="code_128">Code-128</string>
+    <string name="code_itf">ITF</string>
+    <string name="code_codabar">Codabar</string>
+    <string name="barcode_format_2d">Barcode format 2D</string>
+    <string name="qr_code">QR Code</string>
+    <string name="data_matrix">Data Matrix</string>
+    <string name="pdf_417">PDF-417</string>
+    <string name="aztec">AZTEC</string>
 </resources>
