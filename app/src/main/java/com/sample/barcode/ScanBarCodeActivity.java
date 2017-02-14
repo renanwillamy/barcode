@@ -80,7 +80,7 @@ public class ScanBarCodeActivity extends Activity implements SurfaceHolder.Callb
         }
     }
 
-    public void startBarcodeDetection() {
+    private void startBarcodeDetection() {
         mBarcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {

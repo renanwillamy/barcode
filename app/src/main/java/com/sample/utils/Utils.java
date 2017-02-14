@@ -11,7 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class Utils {
-    public static final String CONFIG = "config";
+    private static final String CONFIG = "config";
 
     public static void saveConfiguration(Context context, AppConfiguration config) {
         try {

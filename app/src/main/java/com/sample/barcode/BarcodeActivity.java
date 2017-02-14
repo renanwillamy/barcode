@@ -16,7 +16,7 @@ import static com.sample.barcode.ScanBarCodeActivity.BARCODE;
 
 
 public class BarcodeActivity extends AppCompatActivity {
-    public static final int REQUEST_CODE_SCAN = 0;
+    private static final int REQUEST_CODE_SCAN = 0;
     private ListView mLvContent;
 
     @Override
