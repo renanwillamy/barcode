@@ -10,11 +10,83 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.sample.list.ListDataActivity">
 
-<android.support.v7.widget.RecyclerView
-    android:id="@+id/recyclerview"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/textview1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="@string/id" />
 
-</android.support.v7.widget.RecyclerView>
+    <EditText
+        android:id="@+id/edt_post_id"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textview1"
+        android:layout_marginStart="25dp"
+        android:layout_toEndOf="@id/textview1"
+        android:ellipsize="middle"
+        android:maxLines="1"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/textview2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edt_post_id"
+        android:text="@string/title" />
+
+    <EditText
+        android:id="@+id/edt_post_title"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textview2"
+        android:layout_alignStart="@id/edt_post_id"
+        android:layout_toEndOf="@id/textview2"
+        android:ellipsize="middle"
+        android:maxLines="1"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/textview3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edt_post_title"
+        android:text="@string/user_id" />
+
+    <EditText
+        android:id="@+id/edt_user_id"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textview3"
+        android:layout_alignStart="@id/edt_post_title"
+        android:layout_below="@id/edt_post_title"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/textview4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edt_user_id"
+        android:text="@string/body" />
+
+    <EditText
+        android:id="@+id/edt_body"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textview4"
+        android:layout_alignStart="@id/edt_user_id"
+        android:inputType="text"
+        android:layout_below="@id/edt_user_id"
+        android:ellipsize="middle"
+        android:maxLines="1" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/edt_body"
+        android:layout_marginTop="10dp">
+
+    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

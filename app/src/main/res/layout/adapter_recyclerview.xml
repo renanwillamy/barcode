@@ -1,19 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_text">
+    android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin">
 
     <TextView
-        android:id="@+id/tv_text"
-        android:text="@string/app_name"
-        android:ellipsize="end"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:lines="1"
+        android:id="@+id/textview1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="@string/id" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_post_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@id/textview1" />
+
+    <TextView
+        android:id="@+id/textview2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_post_id"
+        android:text="@string/title" />
+
+    <TextView
+        android:id="@+id/tv_post_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textview1"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@id/textview2"
+        android:ellipsize="middle"
+        android:maxLines="1" />
+
+    <TextView
+        android:id="@+id/textview3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textview2"
+        android:text="@string/user_id" />
+
+    <TextView
+        android:id="@+id/tv_user_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textview2"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@id/textview3" />
+
+    <TextView
+        android:id="@+id/textview4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textview3"
+        android:text="@string/body" />
+
+    <TextView
+        android:id="@+id/tv_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textview3"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@id/textview4"
+        android:ellipsize="middle"
+        android:maxLines="1" />
+
+</RelativeLayout>
