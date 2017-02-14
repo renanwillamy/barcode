@@ -8,29 +8,31 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sample.barcode.R;
+import com.sample.restapi.Post;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class RecyclerViewListAdapter extends RecyclerView.Adapter<RecyclerViewListAdapter.ViewHolder> {
 
-    private ArrayList<String> mDataset;
+    private List<Post> mDataset;
 
-    public RecyclerViewListAdapter(ArrayList<String> myDataset) {
+    public RecyclerViewListAdapter(List<Post> myDataset) {
         mDataset = myDataset;
     }
 
     @Override
     public RecyclerViewListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.adapter_recyclerview, parent, false);
-        // set the view's size, margins, paddings and layout parameters
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mTextView.setText(mDataset.get(position));
+        holder.mTvId.setText(String.valueOf(mDataset.get(position).getId()));
+        holder.mTvTitle.setText(mDataset.get(position).getTitle());
+        holder.mTvUserId.setText(String.valueOf(mDataset.get(position).getUserId()));
+        holder.mTvBody.setText(mDataset.get(position).getBody());
     }
 
     @Override
@@ -39,12 +41,17 @@ public class RecyclerViewListAdapter extends RecyclerView.Adapter<RecyclerViewLi
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        TextView mTextView;
+        TextView mTvId;
+        TextView mTvUserId;
+        TextView mTvTitle;
+        TextView mTvBody;
 
         ViewHolder(View v) {
             super(v);
-            mTextView = (TextView) v.findViewById(R.id.tv_text);
+            mTvId = (TextView) v.findViewById(R.id.tv_post_id);
+            mTvUserId = (TextView) v.findViewById(R.id.tv_user_id);
+            mTvTitle = (TextView) v.findViewById(R.id.tv_post_title);
+            mTvBody = (TextView) v.findViewById(R.id.tv_body);
         }
     }
 }
