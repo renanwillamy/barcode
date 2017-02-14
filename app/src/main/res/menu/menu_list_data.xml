@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/btn_post_menu"
+        android:icon="@android:drawable/ic_menu_send"
+        android:title="@string/post"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/btn_put_menu"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="@string/put"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/btn_get_by_id_menu"
+        android:title="@string/get_by_id"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/btn_delete_menu"
+        android:title="@string/delete"
+        app:showAsAction="never" />
+</menu>

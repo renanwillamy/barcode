@@ -22,4 +22,12 @@
     <string name="data_matrix">Data Matrix</string>
     <string name="pdf_417">PDF-417</string>
     <string name="aztec">AZTEC</string>
+    <string name="id">Id:</string>
+    <string name="title">Title:</string>
+    <string name="user_id">UserId:</string>
+    <string name="body">Body:</string>
+    <string name="post">Post</string>
+    <string name="put">Put</string>
+    <string name="get_by_id">Get By Id</string>
+    <string name="delete">Delete</string>
 </resources>
