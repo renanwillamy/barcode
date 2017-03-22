@@ -12,12 +12,10 @@ import android.widget.Toast;
 
 import com.sample.adapters.RecyclerViewListAdapter;
 import com.sample.barcode.R;
-import com.sample.restapi.Post;
-import com.sample.restapi.PostAPI;
+import com.sample.rest.Post;
+import com.sample.rest.PostAPI;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;

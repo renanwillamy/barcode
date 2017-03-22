@@ -1,4 +1,4 @@
-package com.sample.barcode;
+package com.sample.models.barcode;
 
 
 import android.graphics.Canvas;
@@ -6,14 +6,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-class GraphicOverload {
+public class GraphicOverload {
     private float mLineHeight;
     private Paint mPaint;
-    double mSquareSize[] = {0.80, 0.80};
-    boolean mRunning;
-    Canvas mCanvas;
-    float mScreenWidth;
-    float mScreenHeight;
+    public double[] mSquareSize = {0.80, 0.80};
+    public Canvas mCanvas;
+    public float mScreenWidth;
+    public float mScreenHeight;
+    public boolean mRunning;
     private RectF[] mDarkRect;
     private boolean mReverse;
     private float mX1;
@@ -21,11 +21,11 @@ class GraphicOverload {
     private float mY1;
     private float mY2;
 
-    GraphicOverload() {
+    public GraphicOverload() {
         mPaint = new Paint();
     }
 
-    void drawTransparentBackground() {
+    public void drawTransparentBackground() {
         final int TRANSPARENCY = 55;
         if (mDarkRect == null) {
             initDarkRect();
@@ -59,7 +59,7 @@ class GraphicOverload {
                 mScreenWidth, mY2), new RectF(0, mY2, mScreenWidth, mScreenHeight)};
     }
 
-    void drawHorizontalLine() {
+    public void drawHorizontalLine() {
         if (mLineHeight <= mY1) {
             if (mReverse) {
                 mReverse = false;
@@ -81,7 +81,7 @@ class GraphicOverload {
         }
     }
 
-    void drawCrossLine() {
+    public void drawCrossLine() {
         int squareSizeWidth = (int) ((int) mScreenWidth * mSquareSize[0]);
         int squareSizeHeight = (int) ((int) mScreenWidth * mSquareSize[1]);
         float y1, x1, x2;

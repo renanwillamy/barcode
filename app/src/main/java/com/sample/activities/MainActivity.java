@@ -1,11 +1,10 @@
-package com.sample;
+package com.sample.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.sample.barcode.BarcodeActivity;
 import com.sample.barcode.R;
 import com.sample.list.ListDataActivity;
 

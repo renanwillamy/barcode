@@ -1,4 +1,4 @@
-package com.sample.barcode;
+package com.sample.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -23,8 +23,10 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
-import com.sample.utils.AppConfiguration;
-import com.sample.utils.Utils;
+import com.sample.barcode.R;
+import com.sample.models.barcode.GraphicOverload;
+import com.sample.utilities.AppConfiguration;
+import com.sample.utilities.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,6 +83,24 @@ public class ScanBarCodeActivity extends Activity implements SurfaceHolder.Callb
     }
 
     private void startBarcodeDetection() {
+        //Utilizado para usar um bitmap ao invés da câmera
+        /*Frame myFrame = new Frame.Builder()
+                .setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.qrcode_image))
+                .build();
+        SparseArray<Barcode> barcodes = mBarcodeDetector.detect(myFrame);
+        // Check if at least one barcode was detected
+        if (barcodes.size() != 0) {
+
+            Intent intent = new Intent();
+            ArrayList<String> list = new ArrayList<>();
+            for (int i = 0; i < barcodes.size(); i++) {
+                list.add(barcodes.valueAt(i).rawValue);
+            }
+            intent.putExtra(BARCODE, list);
+            setResult(CommonStatusCodes.SUCCESS, intent);
+            playSound();
+            finish();
+        }*/
         mBarcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {

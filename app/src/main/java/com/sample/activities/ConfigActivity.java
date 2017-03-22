@@ -1,12 +1,13 @@
-package com.sample.barcode;
+package com.sample.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
-import com.sample.utils.AppConfiguration;
-import com.sample.utils.Utils;
+import com.sample.barcode.R;
+import com.sample.utilities.AppConfiguration;
+import com.sample.utilities.Utils;
 
 public class ConfigActivity extends AppCompatActivity implements
         CompoundButton.OnCheckedChangeListener {

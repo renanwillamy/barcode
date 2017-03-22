@@ -1,4 +1,4 @@
-package com.sample.restapi;
+package com.sample.rest;
 
 
 import java.util.List;

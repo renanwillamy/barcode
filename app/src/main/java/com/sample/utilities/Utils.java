@@ -1,4 +1,4 @@
-package com.sample.utils;
+package com.sample.utilities;
 
 import android.content.Context;
 import android.util.Log;

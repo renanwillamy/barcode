@@ -1,4 +1,4 @@
-package com.sample.utils;
+package com.sample.utilities;
 
 import com.google.android.gms.vision.barcode.Barcode;
 

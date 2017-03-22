@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sample.barcode.R;
-import com.sample.restapi.Post;
+import com.sample.rest.Post;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.sample.barcode;
+package com.sample.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,10 +9,11 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
+import com.sample.barcode.R;
 
 import java.util.ArrayList;
 
-import static com.sample.barcode.ScanBarCodeActivity.BARCODE;
+import static com.sample.activities.ScanBarCodeActivity.BARCODE;
 
 
 public class BarcodeActivity extends AppCompatActivity {
